@@ -1,0 +1,30 @@
+services:
+
+  mitmproxy:
+    image: mitmproxy/mitmproxy:latest
+    command: >
+      mitmdump
+      --listen-host 0.0.0.0
+      --listen-port 80
+      -s /proxy/addon.py
+    environment:
+      FAKE_HOST: host.docker.internal
+      FAKE_PORT: "8080"
+    ports:
+      - "${PROXY_PORT:-3000}:80"
+    volumes:
+      - ./proxy:/proxy
+      - proxy-ca:/home/mitmproxy/.mitmproxy
+    depends_on:
+      - fake-server
+
+  fake-server:
+    build:
+      context: ./fake-server
+    environment:
+      PORT: 8080
+    expose:
+      - "8080"
+
+volumes:
+  proxy-ca:
