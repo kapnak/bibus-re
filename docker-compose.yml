@@ -8,7 +8,7 @@ services:
       --listen-port 80
       -s /proxy/addon.py
     environment:
-      FAKE_HOST: host.docker.internal
+      FAKE_HOST: fake-server
       FAKE_PORT: "8080"
     ports:
       - "${PROXY_PORT:-3000}:80"
